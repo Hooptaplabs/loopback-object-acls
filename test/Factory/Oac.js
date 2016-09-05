@@ -4,7 +4,7 @@
 
 const Factory = require('../../src/factories/Oac');
 const {What, Who, Which, When, Request} = require('../../src/factories');
-const {expect} = require('../utils');
+const {expect, G} = require('../utils');
 
 module.exports = () => {
 
@@ -60,39 +60,39 @@ module.exports = () => {
 	
 	describe('.allows (static)', () => {
 
-		it('(example 1) - If no Oacs, then is allowed', () => {
+		it('(example 1) - If no Oacs, then is allowed', G(function* () {
 			let list = [];
 			let r = Request();
-			expect(Factory.allows(list, r)).to.equal(true);
-		});
+			expect(yield Factory.allows(list, r)).to.equal(true);
+		}));
 
-		it('(example 2) - If a void Oac, then is denied', () => {
+		it('(example 2) - If a void Oac, then is denied', G(function* () {
 			let list = [Factory()];
 			let r = Request();
-			expect(Factory.allows(list, r)).to.equal(false);
-		});
+			expect(yield Factory.allows(list, r)).to.equal(false);
+		}));
 
-		it('(example 3) - With two Oacs with same score, DENY wins', () => {
+		it('(example 3) - With two Oacs with same score, DENY wins', G(function* () {
 			let list = [Factory(), Factory({what: 'ALLOW'})];
 			let r = Request();
-			expect(Factory.allows(list, r)).to.equal(false);
-		});
+			expect(yield Factory.allows(list, r)).to.equal(false);
+		}));
 
-		it('(example 4) - Denied for all, allowed for a user', () => {
+		it('(example 4) - Denied for all, allowed for a user', G(function* () {
 			let list = [Factory(), Factory({what: 'ALLOW', who: 'roger'})];
 			let requestRoger = Request({who: 'roger'});
 			let requestManu = Request({who: 'manu'});
-			expect(Factory.allows(list, requestRoger)).to.equal(true);
-			expect(Factory.allows(list, requestManu)).to.equal(false);
-		});
+			expect(yield Factory.allows(list, requestRoger)).to.equal(true);
+			expect(yield Factory.allows(list, requestManu)).to.equal(false);
+		}));
 
-		it('(example 5) - Allowed only for READ properties', () => {
+		it('(example 5) - Allowed only for READ properties', G(function* () {
 			let list = [Factory(), Factory({what: 'ALLOW', which: {type: 'READ'}})];
 			let requestWrite = Request({which: {type: 'WRITE'}});
 			let requestRead = Request({which: {type: 'READ'}});
-			expect(Factory.allows(list, requestWrite)).to.equal(false);
-			expect(Factory.allows(list, requestRead)).to.equal(true);
-		});
+			expect(yield Factory.allows(list, requestWrite)).to.equal(false);
+			expect(yield Factory.allows(list, requestRead)).to.equal(true);
+		}));
 
 
 

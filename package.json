@@ -9,7 +9,9 @@
   "author": "Roger Fos Soler",
   "license": "ISC",
   "dependencies": {
+    "debug": "^2.2.0",
     "lodash": "^4.15.0",
+    "q": "^1.4.1",
     "require-dir": "^0.3.0",
     "stampit": "^2.1.2"
   },

@@ -26,6 +26,8 @@ module.exports = function describeFile(originalPath, moduleName = pathToModuleNa
 				func();
 			}
 		} else {
+			let relativePath = pathToRelative(originalPath);
+			moduleName = moduleName ? moduleName : relativePath;
 			describe.skip(`[describeFile "${moduleName}" didn't exported a function"]`, () => {
 				it('Please ensure the file exports a function');
 			});

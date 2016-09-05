@@ -3,6 +3,7 @@
  */
 
 let Stampit = require('stampit');
+const Q = require('q');
 const {What, Who, Which, When} = require('./index.js');
 const {basics} = require('./partials');
 
@@ -30,7 +31,7 @@ const Oac = module.exports = Stampit()
 
 			let allowScore = this.listToScore(allowList);
 
-			return allowScore > denyScore;
+			return Q(allowScore > denyScore);
 		},
 
 		listToScore(list) {

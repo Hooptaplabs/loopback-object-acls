@@ -6,7 +6,6 @@ const Factory = require('../../src/factories/Which');
 const {expect} = require('../utils');
 
 module.exports = () => {
-	return;
 
 	it('is a function', () => {
 	    expect(Factory).to.be.a('function');

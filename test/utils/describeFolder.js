@@ -11,8 +11,8 @@ const describeFile = require('./describeFile');
 module.exports = function describeFolder(originalPath, moduleName = pathToModuleName(originalPath)) {
 
 	const pathFolder = pathToAbsolute(originalPath);
-
 	const filePaths = getFilesOnPath(pathFolder);
+
 
 	describe(moduleName, () => {
 		if (_.isArray(filePaths)) {
