@@ -1,5 +1,5 @@
 /**
- * Created by roger on 3/09/16.
+ * Created by desaroger on 3/09/16.
  */
 
 const Factory = require('../../src/factories/Oac');
@@ -32,7 +32,7 @@ module.exports = () => {
 	describe('.sortListByScore', () => {
 		
 		it('(example 1)', () => {
-			let oac0 = Factory({which: {property: 'create'}});
+			let oac0 = Factory({which: {id: 'create'}});
 			let oac1 = Factory({which: {type: 'READ'}});
 			let sortedList = Factory.sortListByScore([oac1, oac0]);
 

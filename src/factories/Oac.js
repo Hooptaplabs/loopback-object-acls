@@ -4,7 +4,13 @@
 
 let Stampit = require('stampit');
 const Q = require('q');
-const {What, Who, Which, When} = require('./index.js');
+
+// Factories
+const What = require('./What');
+const Who = require('./Who');
+const Which = require('./Which');
+const When = require('./When');
+const Request = require('./Request');
 const {basics} = require('./partials');
 
 const Oac = module.exports = Stampit()
@@ -19,6 +25,17 @@ const Oac = module.exports = Stampit()
 
 		allows(list, request) {
 
+			if (!Request.isInstanceOf(request)) {
+				request = Request(request);
+			}
+
+			list = list.map(oac => {
+				if (!Oac.isInstanceOf(oac)) {
+					oac = Oac(oac);
+				}
+				return oac;
+			});
+			
 			list = list.filter(oac => oac.check(request));
 
 			let allowList = list.filter(oac => oac.isAllow());
