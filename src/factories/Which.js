@@ -9,17 +9,17 @@ const {basics} = require('./partials');
 
 const Which = module.exports = Stampit()
 	.compose(basics)
-	.init(function WhatInit() {})
+	.init(function WhichInit() {})
 	.methods({
 
 		check(target) {
 
 			target = Which.prepareInput(target);
 
-			if (this.type != null && target.type != this.type) {
+			if (this.type != null && target && target.type != this.type) {
 				return false;
 			}
-			if (this.property != null && target.property != this.property) {
+			if (this.id != null && target && target.id != this.id) {
 				return false;
 			}
 			return true;
@@ -30,7 +30,7 @@ const Which = module.exports = Stampit()
 			if (this.type) {
 				score += 10;
 			}
-			if (this.property) {
+			if (this.id) {
 				score += 20;
 			}
 			return score;
@@ -43,6 +43,6 @@ const Which = module.exports = Stampit()
 	})
 	.refs({
 		type: null,
-		property: null
+		id: null
 	})
 	.props({});

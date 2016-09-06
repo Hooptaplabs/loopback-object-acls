@@ -1,12 +1,11 @@
 /**
- * Created by roger on 3/09/16.
+ * Created by desaroger on 3/09/16.
  */
 
 const Factory = require('../../src/factories/Which');
 const {expect} = require('../utils');
 
 module.exports = () => {
-	return;
 
 	it('is a function', () => {
 	    expect(Factory).to.be.a('function');
@@ -14,24 +13,24 @@ module.exports = () => {
 
 	it('accepts a object', () => {
 		let instance = Factory({type: 'READ'});
-		expect(instance.toObject()).to.deep.equal({property: null, type: 'READ'});
-		instance = Factory({property: 'instantiate'});
-		expect(instance.toObject()).to.deep.equal({property: 'instantiate', type: null});
+		expect(instance.toObject()).to.deep.equal({id: null, type: 'READ'});
+		instance = Factory({id: 'instantiate'});
+		expect(instance.toObject()).to.deep.equal({id: 'instantiate', type: null});
 	});
 
 	it('has as defaults all void', () => {
 		let instance = Factory();
-		expect(instance.toObject()).to.deep.equal({property: null, type: null});
+		expect(instance.toObject()).to.deep.equal({id: null, type: null});
 	});
 
 	describe('instances', () => {
 
 		it('has a score of 100 both, property and type are, defined', () => {
-			expect(Factory({property: 'asd', type: 'READ'}).getScore()).to.equal(30);
+			expect(Factory({id: 'asd', type: 'READ'}).getScore()).to.equal(30);
 		});
 
 		it('has a score of 80 if only the Property is defined', () => {
-			expect(Factory({property: 'asd'}).getScore()).to.equal(20);
+			expect(Factory({id: 'asd'}).getScore()).to.equal(20);
 		});
 
 		it('has a score of 20 if only the Type is defined', () => {
@@ -41,7 +40,7 @@ module.exports = () => {
 		it('has valueOf with the score', () => {
 			let instance = Factory({type: 'READ'});
 			expect(instance.valueOf()).to.equal(10);
-			expect(Factory({property: 'ins'}) > Factory({type: 'READ'})).to.equal(true);
+			expect(Factory({id: 'ins'}) > Factory({type: 'READ'})).to.equal(true);
 		});
 
 		describe('.check', () => {
@@ -62,20 +61,20 @@ module.exports = () => {
 			});
 
 			it('returns true if match property', () => {
-				let instance = Factory({property: 'instantiate'});
+				let instance = Factory({id: 'instantiate'});
 				expect(instance.check({type: 'READ'})).to.equal(false);
-				expect(instance.check({property: 'create'})).to.equal(false);
-				expect(instance.check({property: 'instantiate'})).to.equal(true);
-				expect(instance.check({type: 'WRITE', property: 'instantiate'})).to.equal(true);
+				expect(instance.check({id: 'create'})).to.equal(false);
+				expect(instance.check({id: 'instantiate'})).to.equal(true);
+				expect(instance.check({type: 'WRITE', id: 'instantiate'})).to.equal(true);
 			});
 
 			it('returns true if match type and id', () => {
-				let instance = Factory({type: 'WRITE', property: 'create'});
+				let instance = Factory({type: 'WRITE', id: 'create'});
 				expect(instance.check({type: 'Role'})).to.equal(false);
-				expect(instance.check({property: 'Role'})).to.equal(false);
-				expect(instance.check({type: 'Role', property: 'find'})).to.equal(false);
-				expect(instance.check({type: 'Segment', property: 'create'})).to.equal(false);
-				expect(instance.check({type: 'WRITE', property: 'create'})).to.equal(true);
+				expect(instance.check({id: 'Role'})).to.equal(false);
+				expect(instance.check({type: 'Role', id: 'find'})).to.equal(false);
+				expect(instance.check({type: 'Segment', id: 'create'})).to.equal(false);
+				expect(instance.check({type: 'WRITE', id: 'create'})).to.equal(true);
 			});
 
 		});

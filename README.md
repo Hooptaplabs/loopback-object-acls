@@ -19,3 +19,10 @@ My plan is initially make a simple library with Acls. I found other libraries wi
 I think this first library will be util for others and I plan to export to another repo and this will be only the loopback plugin. But the deadline is near and in order to be fast I make all on one repo.
 
 After this library is completed I will make a loopback plugin to consume the library.
+
+## Progress
+
+- [x] Basic Sync Oacs
+- [x] Mixin for loopback
+- [x] Support for alias
+- [] Support for resolvers

@@ -1,12 +1,11 @@
 /**
- * Created by roger on 4/09/16.
+ * Created by desaroger on 4/09/16.
  */
 
 const Factory = require('../../src/factories/Who');
-const {expect} = require('../utils');
+const {expect, ModelMock} = require('../utils');
 
 module.exports = () => {
-	return;
 
 	it('is a function', () => {
 	    expect(Factory).to.be.a('function');
@@ -46,6 +45,11 @@ module.exports = () => {
 				expect(instance.check({type: 'Role', id: 30})).to.equal(false);
 				expect(instance.check({type: 'Segment', id: 23})).to.equal(false);
 				expect(instance.check({type: 'Role', id: 23})).to.equal(true);
+			});
+
+			it('has loopback', () => {
+			    let Model = ModelMock('Juan');
+				Model.applyMixin();
 			});
 
 		});
