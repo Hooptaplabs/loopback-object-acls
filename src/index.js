@@ -22,7 +22,8 @@ module.exports = function ObjectAclsMixin(Model, options = {}) {
 		
 		// Defaults
 		_.defaults(options, {
-			propertyName: 'acls'
+			propertyName: 'acls',
+			alias: []
 		});
 
 		// Create property
@@ -31,6 +32,7 @@ module.exports = function ObjectAclsMixin(Model, options = {}) {
 		Model.prototype.can = G(function* Can(requestData = {}) {
 
 			let request = requestData;
+			request = requestAliasParse(request, options.alias);
 			let oacList = this[options.propertyName] || [];
 
 			
@@ -42,6 +44,21 @@ module.exports = function ObjectAclsMixin(Model, options = {}) {
 
 			return allowed;
 		});
+		
+		Model.addAclsAlias = Model.prototype.addAclsAlias = function addAclsAlias(newAlias) {
+
+			newAlias = {
+				type: 'Which',
+				id: 'instantiate',
+				replacement: {
+					type: 'EXEC',
+					id: 'instantiate'
+				}
+			};
+			
+			options.alias.push(newAlias);
+			
+		}
 
 
 
@@ -52,3 +69,30 @@ module.exports = function ObjectAclsMixin(Model, options = {}) {
 		prettyError(e);
 	}
 };
+
+
+function requestAliasParse(requestData, alias = []) {
+
+	alias = alias.map(al => {
+		al.type = al.type.toLowerCase();
+		return al;
+	});
+
+	alias.forEach(al => {
+
+		if (requestData[al.type] == al.id) {
+			requestData[al.type] = al.replacement;
+			if (requestData[al.type].type == '$') {
+				requestData[al.type].type = al.id;
+			}
+			if (requestData[al.type].id == '$') {
+				requestData[al.type].id = al.id;
+			}
+		}
+
+	});
+
+	return requestData;
+}
+
+

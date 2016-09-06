@@ -69,6 +69,14 @@ module.exports = () => {
 			expect(allowed).to.equal(true);
 		}));
 
+		it('supports for alias', G(function* () {
+			let request = {which: 'instantiate'};
+			let list = [{what: 'DENY'}, {what: 'ALLOW', which: {type: 'EXEC'}}];
+			expect(yield check(request, list)).to.equal(false);
+			instance.addAclsAlias({type: 'Which', id: 'instantiate', replacement: {type: 'EXEC', id: '$'}});
+			expect(yield check(request, list)).to.equal(true);
+		}));
+
 		describe('(examples)', () => {
 
 			it('1 - Valid who', G(function* () {
