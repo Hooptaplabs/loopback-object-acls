@@ -12,8 +12,20 @@ module.exports = function describeAuto(testPath, ignore = []) {
 
 	testPath = pathToAbsolute(testPath);
 	let folders = allFolders(testPath);
+	
+	let desiredFolders = false;
+	if (process.env.module) {
+		desiredFolders = process.env.module.split(',');
+	}
 
+	// Ignore list
 	folders = folders.filter(folder => !~ignore.indexOf(folder));
+
+	if (desiredFolders != false) {
+		folders = folders.filter(folder => ~desiredFolders.indexOf(folder));
+		let desiredFoldersNotInList = desiredFolders.filter(desiredFolder => !~folders.indexOf(desiredFolder));
+		folders = folders.concat(desiredFoldersNotInList);
+	}
 
 
 	folders.forEach(folder => describeFolder(folder));
