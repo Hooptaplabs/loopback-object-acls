@@ -17,6 +17,7 @@
   },
   "devDependencies": {
     "chai": "^3.5.0",
+    "loopback": "^2.32.0",
     "mocha": "^3.0.2",
     "pretty-error": "^2.0.0"
   }

@@ -3,7 +3,7 @@
  */
 
 const Factory = require('../../src/factories/Who');
-const {expect} = require('../utils');
+const {expect, ModelMock} = require('../utils');
 
 module.exports = () => {
 
@@ -45,6 +45,11 @@ module.exports = () => {
 				expect(instance.check({type: 'Role', id: 30})).to.equal(false);
 				expect(instance.check({type: 'Segment', id: 23})).to.equal(false);
 				expect(instance.check({type: 'Role', id: 23})).to.equal(true);
+			});
+
+			it('has loopback', () => {
+			    let Model = ModelMock('Juan');
+				Model.applyMixin();
 			});
 
 		});

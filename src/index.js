@@ -10,7 +10,7 @@ const {Request, Oac} = require('./factories');
 
 // prettyError.attach();
 
-module.exports = function ObjectAclsMixin(Model, options) {
+module.exports = function ObjectAclsMixin(Model, options = {}) {
 	try {
 
 		const debugN = (...args) => debug(`[${Model.definition.name}]`, ...args);
