@@ -25,4 +25,4 @@ After this library is completed I will make a loopback plugin to consume the lib
 - [x] Basic Sync Oacs
 - [x] Mixin for loopback
 - [x] Support for alias
-- [] Support for resolvers
+- [ ] Support for resolvers
