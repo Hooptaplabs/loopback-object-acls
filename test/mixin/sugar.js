@@ -60,6 +60,15 @@ module.exports = () => {
 	    yield expect(instance.buyWithAcls()).to.eventually.be.rejectedWith('Not allowed.');
 	}));
 
+	it('updates the acls when update the value', G(function* () {
+		resetTickets();
+		yield instance.updateAttributes({stock: 3});
+	    yield expect(instance.buyWithAcls()).to.eventually.be.fulfilled;
+	    yield expect(instance.buyWithAcls()).to.eventually.be.fulfilled;
+	    yield expect(instance.buyWithAcls()).to.eventually.be.fulfilled;
+	    yield expect(instance.buyWithAcls()).to.eventually.be.rejectedWith('Not allowed.');
+	}));
+
 
 	function check(request) {
 		let ignore = [];
