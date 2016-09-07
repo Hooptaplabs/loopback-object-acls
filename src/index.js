@@ -23,7 +23,8 @@ module.exports = function ObjectAclsMixin(Model, options = {}) {
 		// Defaults
 		_.defaults(options, {
 			propertyName: 'acls',
-			alias: []
+			alias: [],
+			resolvers: []
 		});
 
 		// Create property
@@ -35,8 +36,7 @@ module.exports = function ObjectAclsMixin(Model, options = {}) {
 			request = requestAliasParse(request, options.alias);
 			let oacList = this[options.propertyName] || [];
 
-			
-			let allowed = yield Oac.allows(oacList, request);
+			let allowed = yield Oac.allows(oacList, request, options.resolvers, this);
 
 			if (debug.enabled) {
 				debugN('.can, result:', allowed, 'request:', Request(request).toObject(), 'list:', oacList);
@@ -45,19 +45,16 @@ module.exports = function ObjectAclsMixin(Model, options = {}) {
 			return allowed;
 		});
 		
-		Model.addAclsAlias = Model.prototype.addAclsAlias = function addAclsAlias(newAlias) {
+		Model.addAclsAlias = Model.prototype.addAclsAlias = function addAclsAlias(type, id, replacement) {
+			options.alias.push({type, id, replacement});
+		};
 
-			newAlias = {
-				type: 'Which',
-				id: 'instantiate',
-				replacement: {
-					type: 'EXEC',
-					id: 'instantiate'
-				}
-			};
-			
-			options.alias.push(newAlias);
-			
+		Model.addAclsResolver = Model.prototype.addAclsResolver = function addAclsResolver(id, resolver) {
+			options.resolvers.push({id, resolver});
+		};
+
+		Model.cleanAclsResolvers = Model.prototype.cleanAclsResolvers = function cleanAclsResolvers(id, resolver) {
+			options.resolvers = [];
 		}
 
 

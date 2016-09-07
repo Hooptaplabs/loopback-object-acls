@@ -2,11 +2,11 @@
  * Created by desaroger on 3/09/16.
  */
 
-let Stampit = require('stampit');
-const Q = require('q');
+const Stampit = require('stampit');
+const {G} = require('../utils');
 
 // Factories
-const What = require('./What');
+const Want = require('./Want');
 const Who = require('./Who');
 const Which = require('./Which');
 const When = require('./When');
@@ -16,39 +16,58 @@ const {basics} = require('./partials');
 const Oac = module.exports = Stampit()
 	.compose(basics)
 	.init(function OacInit({instance}) {
-		instance.what = What.create(instance.what);
+		instance.want = Want.create(instance.want);
 		instance.who = Who.create(instance.who);
 		instance.which = Which(instance.which);
 		instance.when = When(instance.when);
 	})
 	.static({
 
-		allows(list, request) {
-
-			if (!Request.isInstanceOf(request)) {
-				request = Request(request);
-			}
-
-			list = list.map(oac => {
-				if (!Oac.isInstanceOf(oac)) {
-					oac = Oac(oac);
+		allows(list, request, resolvers, instance) {
+			return G(function* () {
+				if (!Request.isInstanceOf(request)) {
+					request = Request(request);
 				}
-				return oac;
-			});
-			
-			list = list.filter(oac => oac.check(request));
 
-			let allowList = list.filter(oac => oac.isAllow());
-			let denyList = list.filter(oac => oac.isDeny());
+				list = list.map(oac => {
+					if (!Oac.isInstanceOf(oac)) {
+						oac = Oac(oac);
+					}
+					return oac;
+				});
 
-			let denyScore = this.listToScore(denyList);
-			if (!~denyScore) {
-				return true;
-			}
+				list = list.filter(oac => oac.check(request));
 
-			let allowScore = this.listToScore(allowList);
+				let allowList = list.filter(oac => oac.isAllow());
+				let denyList = list.filter(oac => oac.isDeny());
 
-			return Q(allowScore > denyScore);
+				let denyScore = -1;
+				for (let i=0; i < denyList.length; i++) {
+					let oac = denyList[i];
+					let result = yield oac.resolveWhen(resolvers, instance);
+					
+					if (result) {
+						denyScore = oac.getScore();
+						break;
+					}
+				}
+				if (!~denyScore) {
+					return true;
+				}
+
+				let allowScore = -1;
+				for (let i=0; i < allowList.length; i++) {
+					let oac = allowList[i];
+					let result = yield oac.resolveWhen(resolvers, instance);
+
+					if (result) {
+						allowScore = oac.getScore();
+						break;
+					}
+				}
+
+				return allowScore > denyScore;
+			}.bind(this))();
 		},
 
 		listToScore(list) {
@@ -79,8 +98,12 @@ const Oac = module.exports = Stampit()
 	})
 	.methods({
 
+		resolveWhen(resolvers, instance) {
+			return this.when.resolve(resolvers, instance);
+		},
+
 		isAllow() {
-			return this.what.isAllow();
+			return this.want.isAllow();
 		},
 
 		isDeny() {
@@ -147,7 +170,7 @@ const Oac = module.exports = Stampit()
 
 // No permitir instanciar más de 100 instancias en total (100 de stock)
 let example1 = {
-	what: 'DENY',
+	want: 'DENY',
 	which: 'instantiate',
 	when: {
 		'instances.count': {
@@ -161,8 +184,7 @@ let example1 = {
 
 // Solo permitir jugar 3 veces al día por usuario
 let example2 = {
-	default: 'DENY',
-	what: 'DENY',
+	want: 'DENY',
 	which: 'play',
 	when: {
 		'instances.count': {

@@ -3,7 +3,7 @@
  */
 
 const Factory = require('../../src/factories/Oac');
-const {What, Who, Which, When, Request} = require('../../src/factories');
+const {Want, Who, Which, When, Request} = require('../../src/factories');
 const {expect, G} = require('../utils');
 
 module.exports = () => {
@@ -16,7 +16,7 @@ module.exports = () => {
 
 		it('creates the defaults', () => {
 			let instance = Factory();
-			expect(What.isInstanceOf(instance.what)).to.equal(true);
+			expect(Want.isInstanceOf(instance.want)).to.equal(true);
 			expect(Who.isInstanceOf(instance.who)).to.equal(true);
 			expect(Which.isInstanceOf(instance.which)).to.equal(true);
 			expect(When.isInstanceOf(instance.when)).to.equal(true);
@@ -73,13 +73,13 @@ module.exports = () => {
 		}));
 
 		it('(example 3) - With two Oacs with same score, DENY wins', G(function* () {
-			let list = [Factory(), Factory({what: 'ALLOW'})];
+			let list = [Factory(), Factory({want: 'ALLOW'})];
 			let r = Request();
 			expect(yield Factory.allows(list, r)).to.equal(false);
 		}));
 
 		it('(example 4) - Denied for all, allowed for a user', G(function* () {
-			let list = [Factory(), Factory({what: 'ALLOW', who: 'roger'})];
+			let list = [Factory(), Factory({want: 'ALLOW', who: 'roger'})];
 			let requestRoger = Request({who: 'roger'});
 			let requestManu = Request({who: 'manu'});
 			expect(yield Factory.allows(list, requestRoger)).to.equal(true);
@@ -87,7 +87,7 @@ module.exports = () => {
 		}));
 
 		it('(example 5) - Allowed only for READ properties', G(function* () {
-			let list = [Factory(), Factory({what: 'ALLOW', which: {type: 'READ'}})];
+			let list = [Factory(), Factory({want: 'ALLOW', which: {type: 'READ'}})];
 			let requestWrite = Request({which: {type: 'WRITE'}});
 			let requestRead = Request({which: {type: 'READ'}});
 			expect(yield Factory.allows(list, requestWrite)).to.equal(false);
