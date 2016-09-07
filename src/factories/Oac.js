@@ -18,12 +18,13 @@ const Oac = module.exports = Stampit()
 	.init(function OacInit({instance}) {
 		instance.want = Want.create(instance.want);
 		instance.who = Who.create(instance.who);
-		instance.which = Which(instance.which);
+		instance.which = Which.create(instance.which);
 		instance.when = When(instance.when);
 	})
 	.static({
-
+		
 		allows(list, request, resolvers, instance) {
+			// console.log('ALLOWS', list, request);
 			return G(function* () {
 				if (!Request.isInstanceOf(request)) {
 					request = Request(request);
@@ -40,6 +41,9 @@ const Oac = module.exports = Stampit()
 
 				let allowList = list.filter(oac => oac.isAllow());
 				let denyList = list.filter(oac => oac.isDeny());
+
+				// console.log('allow', allowList.map(i => i.toObject()));
+				// console.log('deny', denyList.map(i => i.toObject()));
 
 				let denyScore = -1;
 				for (let i=0; i < denyList.length; i++) {
@@ -65,6 +69,8 @@ const Oac = module.exports = Stampit()
 						break;
 					}
 				}
+				
+				// console.log('scores', allowScore, denyScore);
 
 				return allowScore > denyScore;
 			}.bind(this))();
@@ -163,7 +169,7 @@ const Oac = module.exports = Stampit()
 	})
 	.refs({})
 	.props({
-
+		sugarId: null
 	});
 
 // Examples:
