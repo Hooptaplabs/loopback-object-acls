@@ -8,11 +8,16 @@ const _ = require('lodash');
 const expect = require('./expect');
 const describeFile = require('./describeFile');
 
-module.exports = function describeFolder(originalPath, moduleName = pathToModuleName(originalPath)) {
+module.exports = function describeFolder(originalPath, moduleName = pathToModuleName(originalPath), fileFilter = false) {
 
-	const pathFolder = pathToAbsolute(originalPath);
-	const filePaths = getFilesOnPath(pathFolder);
+	let pathFolder = pathToAbsolute(originalPath);
+	let fileNames = getFilesOnPath(pathFolder);
 
+	if (fileFilter) {
+		fileNames = fileNames.filter(fileName => ~fileFilter.indexOf(fileName));
+	}
+
+	let filePaths = fileNames.map(fileName => path.resolve(pathFolder, fileName));
 
 	describe(moduleName, () => {
 		if (_.isArray(filePaths)) {
@@ -31,8 +36,7 @@ function getFilesOnPath(absPathFolder) {
 		return possibleIndex;
 	} catch (e) {}
 	const filesObj = requireDir(absPathFolder);
-	return Object.keys(filesObj)
-		.map(fileName => path.resolve(absPathFolder, fileName));
+	return Object.keys(filesObj);
 }
 
 function getRootPath() {

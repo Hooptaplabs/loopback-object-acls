@@ -12,24 +12,36 @@ module.exports = function describeAuto(testPath, ignore = []) {
 
 	testPath = pathToAbsolute(testPath);
 	let folders = allFolders(testPath);
-	
-	let desiredFolders = false;
-	if (process.env.module) {
-		desiredFolders = process.env.module.split(',');
-	}
 
 	// Ignore list
 	folders = folders.filter(folder => !~ignore.indexOf(folder));
 
-	if (desiredFolders != false) {
-		folders = folders.filter(folder => ~desiredFolders.indexOf(folder));
-		let desiredFoldersNotInList = desiredFolders.filter(desiredFolder => !~folders.indexOf(desiredFolder));
-		folders = folders.concat(desiredFoldersNotInList);
+	let desiredModules = false;
+	if (process.env.module) {
+		desiredModules = process.env.module.split(',')
+			.reduce((result, item) => {
+				item = item.split(':');
+			    result[item[0]] = item[1] || true;
+				return result;
+			}, {});
 	}
 
 
-	folders.forEach(folder => describeFolder(folder));
+	folders.forEach(folder => {
+		let filter = false;
+		if (desiredModules) {
+			let value = desiredModules[folder];
+			if (value) {
+				if (value !== true) {
+					filter = [value];
+				}
+			} else {
+				return;
+			}
+		}
 
+		describeFolder(folder, undefined, filter);
+	});
 };
 
 function getRootPath() {

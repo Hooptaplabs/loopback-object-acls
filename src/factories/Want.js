@@ -7,10 +7,9 @@ const _ = require('lodash');
 const {} = require('../utils');
 const {basics} = require('./partials');
 
-//console.log('isInstanceOf', typeof isInstanceOf.isInstanceOf);
-const What = module.exports = Stampit()
+const Want = module.exports = Stampit()
 	.compose(basics)
-	.init(function WhatInit() {})
+	.init(function WantInit() {})
 	.static({
 
 		prepareInput(input) {

@@ -2,7 +2,7 @@
  * Created by desaroger on 3/09/16.
  */
 
-const Factory = require('../../src/factories/What');
+const Factory = require('../../src/factories/Want');
 const {expect} = require('../utils');
 
 module.exports = () => {
