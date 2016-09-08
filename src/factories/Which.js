@@ -10,6 +10,19 @@ const {basics} = require('./partials');
 const Which = module.exports = Stampit()
 	.compose(basics)
 	.init(function WhichInit() {})
+	.static({
+
+		prepareInput(input) {
+			if (!input) {
+				return {};
+			}
+			if (_.isString(input)) {
+				return {id: input};
+			}
+			return input;
+		}
+
+	})
 	.methods({
 
 		check(target) {
