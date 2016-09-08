@@ -25,7 +25,8 @@ module.exports = function ObjectAclsMixin(Model, options = {}) {
 			propertyName: 'acls',
 			alias: [],
 			resolvers: [],
-			sugars: []
+			sugars: [],
+			defaults: []
 		});
 
 		// Create property
@@ -36,6 +37,7 @@ module.exports = function ObjectAclsMixin(Model, options = {}) {
 			let request = requestData;
 			request = requestAliasParse(request, options.alias);
 			let oacList = this[options.propertyName] || [];
+			oacList = options.defaults.concat(oacList);
 
 			let allowed = yield Oac.allows(oacList, request, options.resolvers, this);
 
@@ -51,6 +53,7 @@ module.exports = function ObjectAclsMixin(Model, options = {}) {
 			if (_.isString(requestData)) {
 				requestData = {which: requestData};
 			}
+			requestData = requestAliasParse(requestData, options.alias);
 
 			let allowed = yield this.can(requestData);
 
@@ -59,7 +62,19 @@ module.exports = function ObjectAclsMixin(Model, options = {}) {
 			}
 
 		});
+
+
+
 		
+		Model.addAclsDefaults = Model.prototype.addAclsDefaults = function addAclsDefaults(aclsArray) {
+			if (!_.isArray(aclsArray)) {
+				aclsArray = [aclsArray];
+			}
+			options.defaults = options.defaults.concat(aclsArray);
+		};
+
+
+
 		Model.addAclsAlias = Model.prototype.addAclsAlias = function addAclsAlias(type, id, replacement) {
 			options.alias.push({type, id, replacement});
 		};
