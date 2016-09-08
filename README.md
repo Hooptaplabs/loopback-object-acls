@@ -26,4 +26,5 @@ After this library is completed I will make a loopback plugin to consume the lib
 - [x] Mixin for loopback
 - [x] Support for alias
 - [x] Support for resolvers
-- [ ] Support for sugars
+- [x] Support for sugars
+- [ ] Support for defaults
