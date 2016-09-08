@@ -46,7 +46,7 @@ module.exports = () => {
 	it('accepts parameters', G(function* () {
 		let list = [{want: 'DENY', when: {'test': {value: true, with: {hello: true}}}}];
 		Model.addAclsResolver('test', options => {
-			return options.hello;
+			return options.with.hello;
 		});
 		expect(yield check({}, list)).to.equal(false);
 	}));

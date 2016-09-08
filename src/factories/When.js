@@ -128,7 +128,11 @@ const When = module.exports = Stampit()
 					throw new Error(`Unknown resolver for when id "${id}."`);
 				}
 
-				let result = yield resolver.resolver(lucene.with || {});
+				let params = {
+					instance,
+					with: lucene.with || {}
+				};
+				let result = yield resolver.resolver(params);
 
 				// Prepare lucene filter
 				if (!lucene.value) {
