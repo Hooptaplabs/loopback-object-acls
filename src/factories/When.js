@@ -130,7 +130,7 @@ const When = module.exports = Stampit()
 
 				let params = {
 					instance,
-					with: lucene.with || {}
+					options: lucene.with || {}
 				};
 				let result = yield resolver.resolver(params);
 
