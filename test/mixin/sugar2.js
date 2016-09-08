@@ -5,6 +5,7 @@
 let {expect, G, ModelMock, TimeMock} = require('../utils');
 
 module.exports = () => {
+	// skip
 
 	let Model, time, instance, setUser;
 	before(G(function* () {
@@ -55,10 +56,6 @@ module.exports = () => {
 
 		instance = yield Model.create({name: 'juan', stock: 0});
 	}));
-
-	it('asd', () => {
-	    expect(true).to.equal(true);
-	});
 
 
 	function check(request) {
