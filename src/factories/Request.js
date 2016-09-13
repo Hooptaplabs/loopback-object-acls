@@ -17,7 +17,7 @@ const Request = module.exports = Stampit()
 				return {};
 			}
 			if (_.isString(input)) {
-				return {id: input};
+				return {which: {id: input}};
 			}
 			return input;
 		}
