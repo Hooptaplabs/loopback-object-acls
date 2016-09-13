@@ -42,7 +42,7 @@ module.exports = function ObjectAclsMixin(Model, options = {}) {
 			let allowed = yield Oac.allows(oacList, request, options.resolvers, this);
 
 			if (debug.enabled) {
-				debugN('.can, result:', allowed, 'request:', Request(request).toObject(), 'list:', oacList);
+				debugN('.can, result:', allowed, 'request:', Request.create(request).toObject(), 'list:', oacList);
 			}
 
 			return allowed;

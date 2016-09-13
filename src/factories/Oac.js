@@ -27,7 +27,7 @@ const Oac = module.exports = Stampit()
 			// console.log('ALLOWS', list, request);
 			return G(function* () {
 				if (!Request.isInstanceOf(request)) {
-					request = Request(request);
+					request = Request.create(request);
 				}
 
 				list = list.map(oac => {
