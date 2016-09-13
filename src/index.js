@@ -2,7 +2,7 @@
  * Created by desaroger on 3/09/16.
  */
 
-const debug = require('debug')('loopback:mixins:ObjectAcls');
+const debug = require('debug')('loopback:mixins:objectAcls');
 const _ = require('lodash');
 
 const {prettyError, createProperty, G, GO} = require('./utils');
